@@ -4,13 +4,14 @@ project(RetroEngine)
 
 set(DECOMP_VERSION 1.3.3)
 
+set(RETRO_REVISION 3 CACHE STRING "What revision to compile for. Defaults to Origins = 3")
 option(RETRO_FORCE_CASE_INSENSITIVE "Forces case insensivity." OFF)
 option(RETRO_MOD_LOADER "Enables or disables the mod loader." ON)
 option(RETRO_USE_HW_RENDER "Enables usage of Hardware Render as an option." ON)
 option(RETRO_DISABLE_PLUS "Disables Plus. Should be set on for any public releases." OFF)
 option(RETRO_ORIGINAL_CODE "Removes any change that differs from the original code, a playable game can't be built this way." OFF)
 
-set(RETRO_SDL_VERSION 2 CACHE STRING "select between SDL2 and SDL1, defaults to SDL2")
+set(RETRO_SDL_VERSION 2 CACHE STRING "Select between SDL2 and SDL1, defaults to SDL2")
 
 if(RETRO_ORIGINAL_CODE)
     set(RETRO_MOD_LOADER OFF)
@@ -50,7 +51,7 @@ set(RETRO_FILES
 )
 
 if(NOT PLATFORM)
-    if(WIN32) # THIS ASSUMES VCPKG OR SOURCES !!!!!!!
+    if(WIN32)
         set(PLATFORM "Windows" CACHE STRING "The platform to compile for.")
     elseif(ANDROID)
         set(PLATFORM "Android" CACHE STRING "The platform to compile for.")
@@ -173,13 +174,13 @@ if(DEFINED DEP_PATH)
     )
 endif()
 
-
 target_compile_definitions(RetroEngine PRIVATE
+    RSDK_REVISION=${RETRO_REVISION}
     RETRO_USE_MOD_LOADER=$<BOOL:${RETRO_MOD_LOADER}>
     RETRO_USING_OPENGL=$<BOOL:${RETRO_USE_HW_RENDER}>
     RETRO_USE_SDL${RETRO_SDL_VERSION}=1
     FORCE_CASE_INSENSITIVE=$<BOOL:${RETRO_FORCE_CASE_INSENSITIVE}>
-    RETRO_USE_ORIGINAL_CODE=$<BOOL:${RETRO_ORIGINAL_CODE}>
+    RETRO_USE_ORIGINAL_CODE=$<BOOL:${RETRO_USE_ORIGINAL_CODE}>
     
     RSDK_AUTOBUILD=$<BOOL:${RETRO_DISABLE_PLUS}>
     
