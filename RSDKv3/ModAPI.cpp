@@ -68,7 +68,12 @@ void InitMods()
     sprintf(savePath, "");
 
     char modBuf[0x100];
+#if RETRO_PLATFORM == RETRO_IOS
+    // Explicitly target the iOS Documents directory path for mods
+    sprintf(modBuf, "%smods/", SDL_GetPrefPath("", "RSDKv3"));
+#else
     sprintf(modBuf, "%smods", modsPath);
+#endif
     fs::path modPath = ResolvePath(modBuf);
 
     if (fs::exists(modPath) && fs::is_directory(modPath)) {
@@ -229,7 +234,11 @@ void ScanModFolder(ModInfo *info)
         return;
 
     char modBuf[0x100];
+#if RETRO_PLATFORM == RETRO_IOS
+    sprintf(modBuf, "%smods/", SDL_GetPrefPath("", "RSDKv3"));
+#else
     sprintf(modBuf, "%smods", modsPath);
+#endif
 
     fs::path modPath = ResolvePath(modBuf);
 
@@ -264,7 +273,6 @@ void ScanModFolder(ModInfo *info)
                             buffer[i - tokenPos] = modBuf[i] == '\\' ? '/' : modBuf[i];
                         }
 
-                        // PrintLog(modBuf);
                         std::string path(buffer);
                         std::string modPath(modBuf);
                         char pathLower[0x100];
@@ -312,7 +320,6 @@ void ScanModFolder(ModInfo *info)
                             buffer[i - tokenPos] = modBuf[i] == '\\' ? '/' : modBuf[i];
                         }
 
-                        // PrintLog(modBuf);
                         std::string path(buffer);
                         std::string modPath(modBuf);
                         char pathLower[0x100];
@@ -360,7 +367,6 @@ void ScanModFolder(ModInfo *info)
                             buffer[i - tokenPos] = modBuf[i] == '\\' ? '/' : modBuf[i];
                         }
 
-                        // PrintLog(modBuf);
                         std::string path(buffer);
                         std::string modPath(modBuf);
                         char pathLower[0x100];
@@ -383,7 +389,11 @@ void ScanModFolder(ModInfo *info)
 void SaveMods()
 {
     char modBuf[0x100];
+#if RETRO_PLATFORM == RETRO_IOS
+    sprintf(modBuf, "%smods/", SDL_GetPrefPath("", "RSDKv3"));
+#else
     sprintf(modBuf, "%smods", modsPath);
+#endif
     fs::path modPath = ResolvePath(modBuf);
 
     if (fs::exists(modPath) && fs::is_directory(modPath)) {
@@ -402,7 +412,6 @@ void SaveMods()
 
 void RefreshEngine()
 {
-    // Reload entire engine
     Engine.LoadGameConfig("Data/Game/GameConfig.bin");
 #if RETRO_USING_SDL2
     if (Engine.window) {
